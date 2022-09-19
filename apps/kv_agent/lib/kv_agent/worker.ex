@@ -5,7 +5,7 @@ defmodule KVAgent.Worker do
   use Agent
 
   def start_link(_opts) do
-    Agent.start_link(fn -> %{} end)
+    Agent.start_link(fn -> %{} end, [name: KVAgent.MyWorker])
   end
 
   def get(store, key), do: Agent.get(store, &Map.get(&1, key))
