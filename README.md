@@ -1,4 +1,3 @@
 # ElixirOnboard
 
-**TODO: Add description**
-
+Simple Elixir scripts for practicing
