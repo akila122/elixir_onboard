@@ -3,7 +3,7 @@ defmodule KVGenServerTest do
   doctest KVGenServer.Worker
 
   setup do
-    %{store: start_supervised!(KVGenServer.Worker)}
+    %{store: start_supervised(KVGenServer.Worker)}
   end
 
   test "test ops", %{store: store} do
