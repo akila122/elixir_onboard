@@ -1,9 +1,8 @@
 defmodule Fibonnaci do
 
-  def fib(0), do: 0
-  def fib(1), do: 1
-  def fib(n) when is_number(n) and n > 1, do: fib(n-1) + fib(n-2)
-  def fib(n) when is_number(n) and n < 0, do: if rem(n+1, 2) == 0, do: fib(-n), else: -fib(-n)
+  def fib(n, x, _y) when n == 0,  do: x
+  def fib(n, _x, y) when n == 1,  do: y
+  def fib(n, x, y),  do: fib(n-1, y, x + y)
 
 end
 
@@ -11,5 +10,5 @@ end
 IO.gets("Please enter N\n")
 |> Integer.parse()
 |> Kernel.elem(0)
-|> Fibonnaci.fib()
+|> Fibonnaci.fib(0, 1)
 |> IO.puts()
