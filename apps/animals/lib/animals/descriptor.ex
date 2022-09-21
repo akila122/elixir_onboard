@@ -2,7 +2,8 @@
 defmodule Animals.Behaviour do
   @callback speak() :: String.t()
   @callback type() :: atom()
-  @optional_callbacks [speak: 0, type: 0]
+  @callback forgot_to_specify_default() :: any
+  @optional_callbacks [speak: 0, type: 0, forgot_to_specify_default: 0]
 
 
   def default_speak do
@@ -25,9 +26,15 @@ defmodule Animals.Behaviour do
     )|>
     Enum.map(
       fn {callback, _arrity} ->
-        default_callback_name = "default_#{callback}" |> String.to_existing_atom
-        quote do
-          def unquote(callback)(), do: Kernel.apply(Animals.Behaviour, unquote(default_callback_name), [])
+        try do
+          default_callback_name = "default_#{callback}" |> String.to_existing_atom
+          quote do
+            def unquote(callback)(), do: Kernel.apply(Animals.Behaviour, unquote(default_callback_name), [])
+          end
+        rescue ArgumentError ->
+          quote do
+            def unquote(callback)(), do: raise ArgumentError, message: "Default handler for #{unquote(callback)} not defined"
+          end
         end
       end
     )
