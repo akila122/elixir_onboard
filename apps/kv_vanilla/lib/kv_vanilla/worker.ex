@@ -2,7 +2,7 @@ defmodule KVVanilla.Worker do
   def child_spec(ops) do
     %{
       id: __MODULE__,
-      start: {__MODULE__, :vanilla_start, [ops]},
+      start: {__MODULE__, :vanilla_start, [ops]}
     }
   end
 
@@ -17,8 +17,9 @@ defmodule KVVanilla.Worker do
         {store, ret} = handle_call(store, args, caller_pid)
         Kernel.send(caller_pid, ret)
         loop(store)
+
       {:cast, args, caller_pid} ->
-        {store, ret} = handle_cast(store, args, caller_pid)
+        {store, _ret} = handle_cast(store, args, caller_pid)
         loop(store)
     end
   end
@@ -26,6 +27,7 @@ defmodule KVVanilla.Worker do
   defp call(worker_pid, args) do
     caller_pid = Kernel.self()
     send(worker_pid, {:call, args, caller_pid})
+
     receive do
       ret -> ret
     end
@@ -60,5 +62,4 @@ defmodule KVVanilla.Worker do
   def delete(worker_pid, key) do
     cast(worker_pid, {:delete, key})
   end
-
 end

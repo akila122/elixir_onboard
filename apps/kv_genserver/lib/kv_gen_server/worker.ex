@@ -1,20 +1,21 @@
+
 defmodule KVGenServer.Worker do
-  use GenServer
+  use MyGenServer
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, :ok, opts)
   end
 
   def get(server, key) do
-    GenServer.call(server, {:get, key})
+    MyGenServer.call(server, {:get, key})
   end
 
   def put(server, key, value) do
-    GenServer.call(server, {:put, key, value})
+    MyGenServer.call(server, {:put, key, value})
   end
 
   def delete(server, value) do
-    GenServer.call(server, {:delete, value})
+    MyGenServer.call(server, {:delete, value})
   end
 
   @impl true
